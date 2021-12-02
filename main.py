@@ -19,6 +19,12 @@ class Person(BaseModel):
     is_married: Optional[bool] = None
 
 
+class Location(BaseModel):
+    city: str
+    state: str
+    country: str
+
+
 @app.get("/")
 def home():
     return { "Hello": "World" }
@@ -30,7 +36,7 @@ def home():
 def create_person(person: Person = Body(...)):
     return person
 
-# Validations for Query Paramas
+# Validations: Query Paramas
 
 @app.get("/person/detail")
 def show_person(
@@ -50,7 +56,7 @@ def show_person(
     return { "name": name, "age": age }
 
 
-# Validations for Path Parameters
+# Validations: Path Parameters
 
 @app.get("/person/detail/{person_id}")
 def show_person(
@@ -62,3 +68,21 @@ def show_person(
         )
 ):
     return { "person_id": person_id, "exists": True}
+
+
+# Validations: Request Body
+
+@app.put("/person/{person_id}")
+def update_person(
+    person_id: int = Path(
+        ...,
+        gt=0,
+        title="Person Id",
+        description="This is the person id. It's required and must be greater than zero"
+    ),
+    person: Person = Body(...),
+    location: Location = Body(...)
+):
+    results = person.dict()
+    results.update(location.dict())
+    return results
