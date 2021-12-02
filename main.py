@@ -25,20 +25,35 @@ class Person(BaseModel):
     first_name: str = Field(
         ..., 
         min_length=1, 
-        max_length=50
+        max_length=50,
+        example="John"
     )
     last_name: str = Field(
         ..., 
         min_length=1, 
-        max_length=50
+        max_length=50,
+        example="Wick"
     )
     age: int = Field(
         ...,
         gt=0,
-        le=115
+        le=115,
+        example=34
     )
     hair_color: Optional[HairColor] = Field(default=None)
-    is_married: Optional[bool] = Field(default=None)
+    is_married: Optional[bool] = Field(default=None, example=False)
+
+
+    # class Config:
+    #     schema_extra = {
+    #         "example": {
+    #             "first_name": "John",
+    #             "last_name": "Wick",
+    #             "age": 34,
+    #             "hair_color": "black",
+    #             "is_married": False
+    #         }
+    #     }
 
 
 class Location(BaseModel):
@@ -87,7 +102,7 @@ def show_person(
         gt=0,
         title="Perdon Id",
         description="This is the person id. It's required and must be greater than zero"
-        )
+    )
 ):
     return { "person_id": person_id, "exists": True}
 
@@ -102,9 +117,6 @@ def update_person(
         title="Person Id",
         description="This is the person id. It's required and must be greater than zero"
     ),
-    person: Person = Body(...),
-    location: Location = Body(...)
+    person: Person = Body(...)
 ):
-    results = person.dict()
-    results.update(location.dict())
-    return results
+    return person
