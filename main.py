@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 # FastAPI
 from fastapi import FastAPI
 from fastapi import status
-from fastapi import Body, Query, Path
+from fastapi import Body, Query, Path, Form
 
 app = FastAPI()
 
@@ -69,6 +69,15 @@ class PersonDTO(PersonBase):
     pass
 
 
+class LoginDTO(BaseModel):
+    username: str = Field(
+        ...,
+        max_length=20,
+        example="my_user"
+    )
+    message: str = Field(default="Login successful")
+
+
 class Location(BaseModel):
     city: str
     state: str
@@ -78,7 +87,7 @@ class Location(BaseModel):
 @app.get(
     path="/",
     status_code=status.HTTP_200_OK
-    )
+)
 def home():
     return { "Hello": "World" }
 
@@ -89,7 +98,7 @@ def home():
     path="/person/new",
     response_model = PersonDTO,
     status_code=status.HTTP_201_CREATED
-    )
+)
 def create_person(person: Person = Body(...)):
     return person
 
@@ -98,7 +107,7 @@ def create_person(person: Person = Body(...)):
 @app.get(
     path="/person/detail",
     status_code=status.HTTP_200_OK
-    )
+)
 def show_person(
     name: Optional[str] = Query(
         default=None,
@@ -123,7 +132,7 @@ def show_person(
 @app.get(
     path="/person/detail/{person_id}",
     status_code=status.HTTP_200_OK
-    )
+)
 def show_person(
     person_id: int = Path(
         ...,
@@ -141,7 +150,7 @@ def show_person(
 @app.put(
     path="/person/{person_id}",
     status_code=status.HTTP_200_OK
-    )
+)
 def update_person(
     person_id: int = Path(
         ...,
@@ -153,3 +162,12 @@ def update_person(
     person: Person = Body(...)
 ):
     return person
+
+
+@app.post(
+    path="/login",
+    response_model=LoginDTO,
+    status_code=status.HTTP_200_OK
+)
+def login(username: str = Form(...), password: str = Form(...)):
+    return LoginDTO(username=username)
