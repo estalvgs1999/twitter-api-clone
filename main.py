@@ -3,14 +3,16 @@ from typing import Optional
 from enum import Enum
 
 # Pydantic
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field
+from pydantic.networks import EmailStr
 
 # FastAPI
 from fastapi import FastAPI
-from fastapi import status
-from fastapi import Body, Query, Path, Form, Header, Cookie
-from fastapi import File, UploadFile
-from pydantic.networks import int_domain_regex
+from fastapi.exceptions import HTTPException
+from fastapi.datastructures import UploadFile
+from fastapi.params import Body, Cookie, File, Form, Header, Path, Query
+from starlette import status
+
 
 app = FastAPI()
 
@@ -131,6 +133,8 @@ def show_person(
 
 # Validations: Path Parameters
 
+persons_db = [1,2,3,4,5]
+
 @app.get(
     path="/person/detail/{person_id}",
     status_code=status.HTTP_200_OK
@@ -144,6 +148,11 @@ def show_person(
         example=10988
     )
 ):
+    if person_id not in persons_db:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="This person doesn't exists"
+        ) 
     return { "person_id": person_id, "exists": True}
 
 
@@ -216,12 +225,12 @@ def contact(
 def post_image(
     image: UploadFile = File(...)
 ):
+
     return {
         "filename": image.filename,
         "format": image.content_type,
         "size": image_size(image),
     }
-
 
 # Utils
 
