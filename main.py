@@ -10,6 +10,7 @@ from fastapi import FastAPI
 from fastapi import status
 from fastapi import Body, Query, Path, Form, Header, Cookie
 from fastapi import File, UploadFile
+from pydantic.networks import int_domain_regex
 
 app = FastAPI()
 
@@ -205,3 +206,26 @@ def contact(
     ads: Optional[str] = Cookie(default=None)
 ):
     return user_agent
+
+
+# Files 
+
+@app.post(
+    path="/post-image"
+)
+def post_image(
+    image: UploadFile = File(...)
+):
+    return {
+        "filename": image.filename,
+        "format": image.content_type,
+        "size": image_size(image),
+    }
+
+
+# Utils
+
+def image_size(image: UploadFile) -> int:
+    size_bytes = len(image.file.read())
+    size_kilobytes = round(size_bytes/1024, ndigits=2)
+    return str(size_kilobytes)+" kB"
