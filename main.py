@@ -103,9 +103,22 @@ def home():
     path="/person/new",
     response_model = PersonDTO,
     status_code=status.HTTP_201_CREATED,
-    tags=["Persons"]
+    tags=["Persons"],
+    summary="Create Person"
 )
 def create_person(person: Person = Body(...)):
+    '''
+    ## Create Person
+
+    This path operation creates a person in the app and save the information in the database.
+
+    ### Args:
+    - Request body parameter:
+        - **person: Person** -> A person model with first name, last name, age, hair color and marital status.
+
+    ### Returns:
+    A person model with first name, last name, age, hair color and marital status.
+    '''
     return person
 
 # Validations: Query Paramas
@@ -131,6 +144,19 @@ def show_person(
         example=34
     )
 ):
+    """
+    ## Show Person
+
+    [summary]
+
+    ### Args:
+        name: Person name.
+        age: Person Age.
+
+    ### Returns:
+        json: Person model with name and age.
+    """
+
     return { "name": name, "age": age }
 
 
@@ -153,6 +179,21 @@ def show_person(
         tags=["Persons"]
     )
 ):
+    """
+    ## Show Person by Id
+
+    [summary]
+
+    ### Args:
+        person_id : .
+
+    ### Raises:
+        HTTPException: [description]
+
+    ### Returns:
+        json: [description]
+    """
+
     if person_id not in persons_db:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -178,6 +219,18 @@ def update_person(
     ),
     person: Person = Body(...)
 ):
+    """
+    ## Update Person
+
+    [summary]
+
+    ### Args:
+        person_id: [description].
+        person: [description].
+
+    ### Returns:
+        [type]: [description]
+    """
     return person
 
 # Forms
@@ -189,6 +242,18 @@ def update_person(
     tags=["Persons"]
 )
 def login(username: str = Form(...), password: str = Form(...)):
+    """
+    ## User Login
+
+    [summary]
+
+    ### Args:
+        username (str): [description].
+        password (str): [description].
+
+    ### Returns:
+        [type]: [description]
+    """
     return LoginDTO(username=username)
 
 
@@ -222,6 +287,22 @@ def contact(
     user_agent: Optional[str] = Header(default=None),
     ads: Optional[str] = Cookie(default=None)
 ):
+    """
+    ## Contact Form
+
+    [summary]
+
+    ### Args:
+        first_name (str): [description].
+        last_name (str): [description].
+        email (EmailStr): [description]. 
+        message (str): [description]. 
+        user_agent (Optional[str], optional): [description].
+        ads (Optional[str], optional): [description].
+
+    ### Returns:
+        [type]: [description]
+    """
     return user_agent
 
 
@@ -234,6 +315,17 @@ def contact(
 def post_image(
     image: UploadFile = File(...)
 ):
+    """  
+    ## Post Image
+    
+    [summary]
+
+    ### Args:
+        image (UploadFile): [description].
+
+    ### Returns:
+        [type]: [description]
+    """
 
     return {
         "filename": image.filename,
@@ -244,6 +336,17 @@ def post_image(
 # Utils
 
 def image_size(image: UploadFile) -> int:
+    """
+    ## Get Image Size
+    
+    [summary]
+
+    ### Args:
+        image (UploadFile): [description]
+
+    ### Returns:
+        int: [description]
+    """
     size_bytes = len(image.file.read())
     size_kilobytes = round(size_bytes/1024, ndigits=2)
     return str(size_kilobytes)+" kB"
