@@ -3,11 +3,14 @@ from typing import List
 
 # FastAPI
 from fastapi import APIRouter, status
+from fastapi.params import Body
+from services.users import UserService
 
 # Models
-from models.user import User
+from models.user import User, UserRegister
 
 router = APIRouter()
+service = UserService()
 
 # Path Operations
 @router.post(
@@ -17,8 +20,8 @@ router = APIRouter()
     summary="Register a user",
     tags=["Users"]
 )
-def signup():
-    pass
+def signup(user: UserRegister = Body(...)):
+    return service.signup(user)
 
 
 @router.post(
