@@ -4,10 +4,10 @@ from typing import List
 # FastAPI
 from fastapi import APIRouter, status
 from fastapi.params import Body
-from services.users import UserService
+from app.services.users import UserService
 
 # Models
-from models.user import User, UserRegister
+from app.models.user import User, UserRegister
 
 router = APIRouter()
 service = UserService()
@@ -21,6 +21,15 @@ service = UserService()
     tags=["Users"]
 )
 def signup(user: UserRegister = Body(...)):
+    """
+    This path operation register a user in the app.
+
+    **Args:**
+        user (UserRegister, optional): New user.
+
+    **Returns:**
+        User: Returns a json with the basic user information.
+    """
     return service.signup(user)
 
 
@@ -43,7 +52,13 @@ def login():
     tags=["Users"]
 )
 def get_all_users():
-    pass
+    """
+    Shows all users in the app.
+
+    **Returns:**
+        List[User]: List with all users in the app.
+    """
+    return service.get_all()
 
 
 @router.get(

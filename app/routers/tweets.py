@@ -4,7 +4,7 @@ from typing import List
 from fastapi import APIRouter, status
 
 # Models
-from models.tweet import Tweet
+from app.models.tweet import Tweet
 
 router = APIRouter()
 
@@ -18,7 +18,7 @@ router = APIRouter()
     tags=["Tweets"]
 )
 def home():
-    return "Hello from Twitter API"
+    return []
 
 
 @router.post(

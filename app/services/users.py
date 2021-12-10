@@ -1,7 +1,7 @@
-import json, os
-from models.user import User, UserRegister
+from app.data.db import UsersRepository
+from app.models.user import UserRegister
 
-db_dir = os.getenv("DB_PATH")
+repository = UsersRepository()
 
 class UserService:
 
@@ -15,12 +15,21 @@ class UserService:
         Returns:
             User: Returns json with the basic user information.
         """
-        with open("/home/ealvarado/Documents/code/platzi-fast-api/app/db/users.json", "r+", encoding="utf-8") as f:
-            results = json.loads(f.read())
-            user_dict = user.dict()
-            user_dict["user_id"] = str(user_dict["user_id"])
-            user_dict["birth_date"] = str(user_dict["birth_date"])
-            results.append(user_dict)
-            f.seek(0) # Moving to first byte of the file
-            f.write(json.dumps(results))
-            return user
+
+        results = repository.read()
+        user_dict = user.dict()
+        user_dict["user_id"] = str(user_dict["user_id"])
+        user_dict["birth_date"] = str(user_dict["birth_date"])
+        results.append(user_dict)
+        repository.write(results)
+        return user
+
+
+    def get_all(self):
+        """
+        Shows all users in the app.
+
+        Returns:
+            List(User): List with all users in the app.
+        """
+        return repository.read()
