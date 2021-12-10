@@ -1,2 +1,2 @@
 # Run FastAPI 
-uvicorn main:app --reload
+cd ./app && uvicorn main:app --reload
