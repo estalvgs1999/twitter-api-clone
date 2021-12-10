@@ -21,6 +21,15 @@ service = UserService()
     tags=["Users"]
 )
 def signup(user: UserRegister = Body(...)):
+    """
+    This path operation register a user in the app.
+
+    Args:
+        user (UserRegister, optional): New user.
+
+    Returns:
+        User: Returns a json with the basic user information.
+    """
     return service.signup(user)
 
 

@@ -16,11 +16,11 @@ class UserService:
             User: Returns json with the basic user information.
         """
         with open("/home/ealvarado/Documents/code/platzi-fast-api/app/db/users.json", "r+", encoding="utf-8") as f:
-            results = json.loads(f.read())
+            results = json.loads(f)
             user_dict = user.dict()
             user_dict["user_id"] = str(user_dict["user_id"])
             user_dict["birth_date"] = str(user_dict["birth_date"])
             results.append(user_dict)
             f.seek(0) # Moving to first byte of the file
-            f.write(json.dumps(results))
+            json.dumps(results,f)
             return user

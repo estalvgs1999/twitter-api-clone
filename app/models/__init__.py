@@ -1,2 +1,3 @@
-import pip
-pip.main(["install","pydantic[email]"])
+import os
+cmd = """python -m pip install 'pydantic[email]'"""
+os.system(cmd)
