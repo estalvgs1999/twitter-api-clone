@@ -15,7 +15,7 @@ class UserService:
         Returns:
             User: Returns json with the basic user information.
         """
-        with open("/home/ealvarado/Documents/code/platzi-fast-api/app/db/users.json", "r+", encoding="utf-8") as f:
+        with open(f"{db_dir}/users.json", "r+", encoding="utf-8") as f:
             results = json.loads(f)
             user_dict = user.dict()
             user_dict["user_id"] = str(user_dict["user_id"])
