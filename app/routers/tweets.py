@@ -18,7 +18,7 @@ router = APIRouter()
     tags=["Tweets"]
 )
 def home():
-    return "Hello from Twitter API"
+    return []
 
 
 @router.post(
