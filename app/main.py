@@ -1,10 +1,7 @@
-# Python
-from typing import List
-
 # FastAPI
-from fastapi import FastAPI, status
+from fastapi import FastAPI
 
-from routers import users, tweets
+from app.routers import users, tweets
 
 app = FastAPI()
 
