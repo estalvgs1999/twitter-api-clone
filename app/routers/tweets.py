@@ -1,12 +1,16 @@
+# Python
 from typing import List
 
 # FastAPI
 from fastapi import APIRouter, status
+from fastapi.params import Body
 
 # Models
 from app.models.tweet import Tweet
+from app.services.tweets import TweetService
 
 router = APIRouter()
+service = TweetService()
 
 # Path Operations
 
@@ -18,7 +22,7 @@ router = APIRouter()
     tags=["Tweets"]
 )
 def home():
-    return []
+    return service.get_tweets()
 
 
 @router.post(
@@ -28,8 +32,8 @@ def home():
     summary="Post a tweet",
     tags=["Tweets"]
 )
-def post_tweet():
-    pass
+def post_tweet(tweet: Tweet = Body(...)):
+    return service.post_tweet(tweet)
 
 
 @router.get(

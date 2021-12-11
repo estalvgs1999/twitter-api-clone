@@ -1,3 +1,4 @@
+from app import util
 from app.data.db import UsersRepository
 from app.models.user import UserRegister
 
@@ -17,9 +18,7 @@ class UserService:
         """
 
         results = repository.read()
-        user_dict = user.dict()
-        user_dict["user_id"] = str(user_dict["user_id"])
-        user_dict["birth_date"] = str(user_dict["birth_date"])
+        user_dict = util.serialize(user.dict())
         results.append(user_dict)
         repository.write(results)
         return user
