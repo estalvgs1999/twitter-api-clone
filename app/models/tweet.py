@@ -8,7 +8,7 @@ from pydantic.fields import Field
 from pydantic.main import BaseModel
 
 # Models
-from models.user import User
+from app.models.user import User
 
 
 class Tweet(BaseModel):
